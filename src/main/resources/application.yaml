@@ -1,0 +1,103 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: swagger-profile-service
+          uri: http://profile-service:4000/swagger-ui/index.html
+          predicates:
+            - Path=/profile-service/doc
+          filters:
+            - RewritePath=/profile-service/doc,/swagger-ui/index.html
+
+        - id: swagger-social-service
+          uri: http://social-service:5000/swagger-ui/index.html
+          predicates:
+            - Path=/social-service/doc
+          filters:
+            - RewritePath=/social-service/doc,/swagger-ui/index.html
+
+        - id: swagger-workout-service
+          uri: http://workout-service:7000/swagger-ui/index.html
+          predicates:
+            - Path=/workout-service/doc
+          filters:
+            - RewritePath=/workout-service/doc,/swagger-ui/index.html
+
+        - id: swagger-guild-service
+          uri: http://guild-service:8000/swagger-ui/index.html
+          predicates:
+            - Path=/guild-service/doc
+          filters:
+            - RewritePath=/guild-service/doc,/swagger-ui/index.html
+
+        - id: swagger-event-service
+          uri: http://event-service:9000/swagger-ui/index.html
+          predicates:
+            - Path=/event-service/doc
+          filters:
+            - RewritePath=/event-service/doc,/swagger-ui/index.html
+
+        - id: swagger-shoes-service
+          uri: http://shoes-service:2222/swagger-ui/index.html
+          predicates:
+            - Path=/shoes-service/doc
+          filters:
+            - RewritePath=/shoes-service/doc,/swagger-ui/index.html
+
+        - id: swagger-achievement-service
+          uri: http://achievement-service:3333/swagger-ui/index.html
+          predicates:
+            - Path=/achievement-service/doc
+          filters:
+            - RewritePath=/achievement-service/doc,/swagger-ui/index.html
+
+        - id: swagger-story-manager-service
+          uri: http://story-manager-service:4444/swagger-ui/index.html
+          predicates:
+            - Path=/story-manager-service/doc
+          filters:
+            - RewritePath=/story-manager-service/doc,/swagger-ui/index.html
+
+        - id: swagger-story-progress-service
+          uri: http://story-progress-service:5555/swagger-ui/index.html
+          predicates:
+            - Path=/story-progress-service/doc
+          filters:
+            - RewritePath=/story-progress-service/doc,/swagger-ui/index.html
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/Run_App
+
+server:
+  port: 3000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-service:7777/eureka
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-details: always
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
