@@ -58,9 +58,6 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image and Push
-        run: ./.github/workflows/docker_build_and_push.sh ${{ github.sha }}
-
-      - name: Build Docker image and Push
         run: |-
           docker buildx create --use
           docker buildx build \
