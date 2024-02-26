@@ -1,20 +1,74 @@
 spring:
   application:
-    name: api-gateway
+    name: ${SPRING_APPLICATION_NAME:api-gateway}
   cloud:
     gateway:
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
+      routes:
+        - id: shoes-service
+          uri: ${SHOES_SERVICE-URL:http://localhost:2222}
+          predicates:
+            - Path=${SHOES_PATH:/shoes-service/**}
+          filters:
+            - RewritePath=${SHOES_PATH:/shoes-service/(?<path>.*)}, /$\{path}
+        - id: event-service
+          uri: ${EVENT_SERVICE_URL:http://localhost:9000}
+          predicates:
+            - Path=${EVENT_PATH:/event-service/**}
+          filters:
+            - RewritePath=${EVENT_PATH:/event-service/(?<path>.*)}, /$\{path}
+        - id: guild-service
+          uri: ${GUILD_SERVICE_URL:http://localhost:8000}
+          predicates:
+            - Path=${GUILD_PATH:/guild-service/**}
+          filters:
+            - RewritePath=${GUILD_PATH:/guild-service/(?<path>.*)}, /$\{path}
+        - id: profile-service
+          uri: ${PROFILE_SERVICE_URL:http://localhost:4000}
+          predicates:
+            - Path=${PROFILE_PATH:/profile-service/**}
+          filters:
+            - RewritePath=${PROFILE_PATH:/profile-service/(?<path>.*)}, /$\{path}
+        - id: story-manager-service
+          uri: ${STORY_MANAGER_SERVICE_URL:http://localhost:4444}
+          predicates:
+            - Path=${STORY_MANAGER_PATH:/story-manager-service/**}
+          filters:
+            - RewritePath=${STORY_MANAGER_PATH:/story-manager-service/(?<path>.*)}, /$\{path}
+        - id: story-progress-service
+          uri: ${STORY_PROGRESS-SERVICE_URL:http://localhost:5555}
+          predicates:
+            - Path=${STORY_PROGRESS_PATH:/story-progress-service/**}
+          filters:
+            - RewritePath=${STORY_PROGRESS_PATH:/story-progress-service/(?<path>.*)}, /$\{path}
+        - id: workout-service
+          uri: ${WORKOUT_SERVICE_URL:http://localhost:7000}
+          predicates:
+            - Path=${WORKOUT_PATH:/workout-service/**}
+          filters:
+            - RewritePath=${WORKOUT_PATH:/workout-service/(?<path>.*)}, /$\{path}
+        - id: achievement-service
+          uri: ${ACHIEVEMENT_SERVICE_URL:http://localhost:3333}
+          predicates:
+            - Path=${ACHIEVEMENT_PATH:/achievement-service/**}
+          filters:
+            - RewritePath=${ACHIEVEMENT_PATH:/achievement-service/(?<path>.*)}, /$\{path}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI}
 
 server:
-  port: 3000
+  port: ${SERVICE_SERVER_PORT:3000}
 
 eureka:
   client:
-    service-url:
-      defaultZone: http://localhost:7777/eureka
+    enabled: false
 
 management:
   tracing:
@@ -23,12 +77,12 @@ management:
   endpoint:
     health:
       show-details: always
-  zipkin:
-    tracing:
-      endpoint: http://zipkin:9411/api/v2/spans
   endpoints:
     web:
       exposure:
         include: "*"
 
 
+logging:
+  level:
+    org.springframework.cloud.gateway: ${GATEWAY_LOGGING_LEVEL:DEBUG}
