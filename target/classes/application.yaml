@@ -9,7 +9,7 @@ spring:
           lower-case-service-id: true
       routes:
         - id: shoes-service
-          uri: ${SHOES_SERVICE-URL:http://localhost:2222}
+          uri: ${SHOES_SERVICE_URL:http://localhost:2222}
           predicates:
             - Path=${SHOES_PATH:/shoes-service/**}
           filters:
@@ -39,7 +39,7 @@ spring:
           filters:
             - RewritePath=${STORY_MANAGER_PATH:/story-manager-service/(?<path>.*)}, /$\{path}
         - id: story-progress-service
-          uri: ${STORY_PROGRESS-SERVICE_URL:http://localhost:5555}
+          uri: ${STORY_PROGRESS_SERVICE_URL:http://localhost:5555}
           predicates:
             - Path=${STORY_PROGRESS_PATH:/story-progress-service/**}
           filters:
